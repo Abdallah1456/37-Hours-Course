@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_37hours/firebase_options.dart';
 import 'Views/Register.dart';
 import 'Views/login.dart';
 
@@ -15,6 +12,11 @@ void main() {
     ),
     // home: const RegisterView(),
     home: const LoginView(),
+    routes: {
+      "/Login/": (context) => const LoginView(),
+      "/Register/": (context) => const RegisterView(),
+    },
   ),);
 }
+
 

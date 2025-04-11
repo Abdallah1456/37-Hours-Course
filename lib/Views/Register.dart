@@ -25,6 +25,7 @@ class _RegisterViewState extends State<RegisterView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text("Register"),),
       body: FutureBuilder(
         future: Firebase.initializeApp(options:  DefaultFirebaseOptions.currentPlatform),
         builder: (context, snapshot) {
@@ -49,14 +50,21 @@ class _RegisterViewState extends State<RegisterView> {
                       print("bad ${e.code}");
                     }
                   },child: const Text("Register"),),
+                  TextButton(onPressed: (){
+                    Navigator.of(context).pushNamedAndRemoveUntil("/Login/", (route) => false,);
+                  }, child: const Text("Have an account?"))
                 ],
-              ); default: return const Text("loading");
+              );
+              default: return const CircularProgressIndicator();
           }
         },
       ),
     );
   }
 }
+
+
+
 
 
 
