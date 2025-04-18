@@ -3,8 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_37hours/firebase_options.dart';
 import 'package:flutter_37hours/main.dart';
-import 'Register.dart';
-import 'Verify_email.dart';
+import "dart:developer" as devtools show log;
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -53,11 +52,12 @@ class _LoginViewState extends State<LoginView> {
                     Firebase.initializeApp(options:  DefaultFirebaseOptions.currentPlatform);
                     final email = _email.text;
                     final password = _password.text;
-
                     try{
                       final userCredential = FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
                       final user = FirebaseAuth.instance.currentUser;
-                      print("${FirebaseAuth.instance.currentUser} Signed in");
+                      Navigator.of(context).pushNamedAndRemoveUntil('/notes/', (route) => false,);
+                      devtools.log(userCredential.toString());
+                      devtools.log(user.toString());
                       if (user != null){
                         if(user?.emailVerified ?? false){const Text("Done");
                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const NotesView(),));}
@@ -69,15 +69,15 @@ class _LoginViewState extends State<LoginView> {
                       }
 
                     } on FirebaseException catch(e){
-                      if (e.code == 'user-not-found'){print("User not found");}
-                      print("bad\n$e");
+                      if (e.code == 'user-not-found'){ devtools.log("User not found"); }
+                      devtools.log("bad\n$e");
                     }
 
                     },
                     child: const Text("Login"),),
                     TextButton(onPressed: (){
                       Navigator.of(context).pushNamedAndRemoveUntil("/Register/", (route) => false,);
-                    }, child: const Text("Not registed yet?")),
+                    }, child: const Text("Not registered yet?")),
                 ],
               );
               default: return const Text("loading");
