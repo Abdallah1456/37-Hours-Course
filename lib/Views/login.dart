@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_37hours/firebase_options.dart';
+import 'package:flutter_37hours/main.dart';
 import 'Register.dart';
 import 'Verify_email.dart';
 
@@ -58,9 +59,10 @@ class _LoginViewState extends State<LoginView> {
                       final user = FirebaseAuth.instance.currentUser;
                       print("${FirebaseAuth.instance.currentUser} Signed in");
                       if (user != null){
-                        if(user?.emailVerified ?? false){const Text("Done"); print(userCredential);}
+                        if(user?.emailVerified ?? false){const Text("Done");
+                        Navigator.of(context).push(MaterialPageRoute(builder: (context) => const NotesView(),));}
                         else{
-                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const VerifyEmailView(),));
+                         Navigator.of(context).push(MaterialPageRoute(builder: (context) => const NotesView(),));
                         }}
                       else {
                         // return  const LoginView();
