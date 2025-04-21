@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_37hours/Views/login.dart';
 import 'package:flutter_37hours/constants/routes.dart';
-import "dart:developer" as devtools show log;
 import 'package:flutter_37hours/firebase_options.dart';
+// import "dart:developer" as devtools show log;
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -11,6 +12,8 @@ class RegisterView extends StatefulWidget {
   @override
   State<RegisterView> createState() => _RegisterViewState();
 }
+
+
 
 class _RegisterViewState extends State<RegisterView> {
 
@@ -36,25 +39,41 @@ class _RegisterViewState extends State<RegisterView> {
               return Column(
                 children: [
 
+                  // Email TextField
                   TextField(controller: _email, keyboardType: TextInputType.emailAddress, decoration: const InputDecoration(hintText: "Email"),),
 
+                  // Password TextField
                   TextField(controller: _password,obscureText: true,decoration: const InputDecoration(hintText: "Password"), autocorrect: false,), // Password
 
-                  TextButton(onPressed: () async {  // Register Button
+                  // Register button
+                  TextButton(onPressed: () async
+                  {
                     Firebase.initializeApp(options:  DefaultFirebaseOptions.currentPlatform);
                     final email = _email.text;
                     final password = _password.text;
                     try{
                       final userCredential = FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password).toString();
-                      devtools.log(userCredential);
-                    } on FirebaseException catch(e){
-                      if (e.code == 'weak-password'){devtools.log("Weak password $e");}
-                      devtools.log("bad ${e.code}");
+                      final user = FirebaseAuth.instance.currentUser;
+                      await user?.sendEmailVerification();
+                      await showErrorDialog(context, userCredential);
+                      Navigator.of(context).pushNamed(verifyEmail);
                     }
-                  },child: const Text("Register"),),
+
+                    // Exception
+                    on FirebaseException catch(e){
+                      if (e.code == 'weak-password'){await showErrorDialog(context, "Weak password $e");}
+                      else { await showErrorDialog(context, "Error${e.code}"); }
+                      await showErrorDialog(context, "bad ${e.code}");
+                    } catch(e){ await showErrorDialog(context, e.toString()); }
+
+                  },
+                    child: const Text("Register"),),
+
+                  // Have an account button
                   TextButton(onPressed: (){
                     Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false,);
                   }, child: const Text("Have an account?"))
+
                 ],
               );
               default: return const CircularProgressIndicator();
