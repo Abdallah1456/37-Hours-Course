@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'Views/Register.dart';
 import 'Views/login.dart';
 import 'dart:developer' as devtools show log;
+import 'constants/routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,10 +16,10 @@ void main() {
     // home: const RegisterView(),
 
     home: const LoginView(),
-    routes: {
-      "/Login/": (context) => const LoginView(),
-      "/Register/": (context) => const RegisterView(),
-      "/notes/": (context) => const NotesView(),
+    routes: {                                                                   // Routes
+      loginRoute: (context) => const LoginView(),
+      registerRoute: (context) => const RegisterView(),
+      notesRoute: (context) => const NotesView(),
     },
 
   ),);
@@ -47,7 +48,7 @@ class _NotesViewState extends State<NotesView> {
                   final shouldLogout = await showLogOutDialog(context);
                   if (shouldLogout) {
                     await FirebaseAuth.instance.signOut();
-                    Navigator.of(context).pushNamedAndRemoveUntil('/Login/', (_) => false);
+                    Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (_) => false);
                   }
                   devtools.log(shouldLogout.toString());
               }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_37hours/constants/routes.dart';
 import "dart:developer" as devtools show log;
 import 'package:flutter_37hours/firebase_options.dart';
 
@@ -52,7 +53,7 @@ class _RegisterViewState extends State<RegisterView> {
                     }
                   },child: const Text("Register"),),
                   TextButton(onPressed: (){
-                    Navigator.of(context).pushNamedAndRemoveUntil("/Login/", (route) => false,);
+                    Navigator.of(context).pushNamedAndRemoveUntil(loginRoute, (route) => false,);
                   }, child: const Text("Have an account?"))
                 ],
               );
